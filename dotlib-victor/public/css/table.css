@@ -1,0 +1,61 @@
+table {
+  width: 100%;
+  text-align: center;
+  border-radius: 20px !important;
+  border-collapse: collapse !important;
+  border: none !important;
+
+  box-shadow: 5px 5px 8px -4px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 5px 5px 8px -4px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 5px 5px 8px -4px rgba(0, 0, 0, 0.75);
+}
+
+thead > tr {
+  background-color: rgba(249, 250, 251, var(--tw-bg-opacity));
+}
+
+thead > tr > td {
+  padding: 15px;
+  color: rgba(107, 114, 128);
+  opacity: 0.9;
+}
+
+table thead,
+table td {
+  border: none !important;
+}
+
+thead tr:last-child td:first-child {
+  border-radius: 20px 0 0 0 !important;
+}
+
+thead tr:last-child td:last-child {
+  border-radius: 0 20px 0 0 !important;
+}
+
+tbody tr:last-child td:first-child {
+  border-radius: 0 0 0 20px !important;
+}
+
+tbody tr:last-child td:last-child {
+  border-radius: 0 0 20px 0 !important;
+}
+
+table tbody tr td{
+    padding: 10px 20px;
+}
+
+.crudButton {
+    justify-content: center;
+    text-decoration: none;
+    opacity: 0.6;
+    transition: .2s all ease-in-out;
+}
+
+.crudButton:hover {
+    opacity: 1;
+}
+
+.btns-tabela form{
+    display: flex;
+}
