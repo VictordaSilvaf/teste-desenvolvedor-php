@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                     <h2><span>Nome do produto: </span>{{ $product->name_product }}</h2>
-                    <p><span>Nome do ID: </span>{{ $product->id }}</p>
+                    <p><span>ID: </span>{{ $product->id }}</p>
                     <p><span>Preço unitário: </span>{{ $product->uni_price_product }}</p>
                     <p><span>Código de barra: </span>{{ $product->barcode_product }}</p>
                     <p><span>Quantidade: </span>{{ $product->qnt_product }}</p>

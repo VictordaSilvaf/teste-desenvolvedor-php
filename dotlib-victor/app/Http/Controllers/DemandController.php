@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Demand;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class DemandController extends Controller
 {
@@ -14,9 +18,16 @@ class DemandController extends Controller
      */
     public function index()
     {
-        $data = Demand::paginate(20);
+        $datas = Demand::paginate(20);
 
-        return view('demands.index', compact('data'));
+        $customers = Customer::all();
+        $products = Product::all();
+        /* foreach ($customers as $customer) {
+            # code...
+            DB::table('demands')->where($customer->customer_id)->value('email');
+        }
+ */
+        return view('demands.index', compact('datas', 'customers', 'products'));
     }
 
     /**
@@ -26,7 +37,10 @@ class DemandController extends Controller
      */
     public function create()
     {
-        return view('demands.create');
+        $customers = Customer::all();
+        $products = Product::all();
+
+        return view('demands.create', compact('products'), compact('customers'));
     }
 
     /**
@@ -37,24 +51,47 @@ class DemandController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'products_id' => 'required',
-            'demands_id' => 'required',
-        ]);
+        /* dd($request->all()); */
+        Validator::make($request->all(), [
+            'customer_id' => 'required',
+            'product_id' => 'required',
+            'status' => 'required',
+            'discount' => 'max:3'
+        ], [
+            'required' => 'Este campo é obrigatório.',
+            'max' => 'O numero máximo de caracteres é :max.',
+        ])->validate();
 
-        Demand::create($request->all());
+        $demand = new Demand;
 
-        return redirect()->route('demands.index')->banner('success', 'Pedido criado com sucesso.');
+        if($request->discount == null) {
+            $demand->discount = 0;
+        }
+
+        $customers = Customer::all();
+        $products = Product::all();
+
+        $demand->customer_id = $customers->findOfFail($request->customer_id);
+        $demand->product_id = $products->findOfFail($request->product_id);
+
+        try {
+            $demand->save();
+            return redirect()->route('pedidos.index')->banner('Pedido criado com sucesso.');
+        } catch (\Throwable $th) {
+            dd($th);
+            return redirect()->route('pedidos.index')->dangerBanner('Não foi possivel adicionar o desconto.');
+        }
     }
 
     /**
      * Mostra o recurso especificado.
      *
-     * @param  \App\Models\Demand  $demand
+     * @param   $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Demand $demand)
+    public function show($id)
     {
+        $demand = Demand::findOrFail($id);
         return view('demands.show', compact('demand'));
     }
 
@@ -82,11 +119,12 @@ class DemandController extends Controller
             'uni_price_product' => 'required',
             'barcode_product' => 'required',
             'qnt_product' => 'required',
+            'discount' => 'max:3'
         ]);
 
         $demand->update($request->all());
 
-        return redirect()->route('demands.index')->banner('Pedido atualizado com sucesso.');
+        return redirect()->route('pedidos.index')->banner('Pedido atualizado com sucesso.');
     }
 
     /**
@@ -99,6 +137,19 @@ class DemandController extends Controller
     {
         $demand->delete();
 
-        return redirect()->route('products.index')->banner('success', 'Pedido deletado com sucesso.');
+        return redirect()->route('pedidos.index')->banner('Pedido deletado com sucesso.');
+    }
+
+    /**
+     * Cancelar um pedido.
+     *
+     * @param  $id
+     */
+    public function cancel($id)
+    {
+        $demand = Demand::findOrFail($id);
+        $demand->status = 'canceled';
+        $demand->save();
+        return redirect()->route('pedidos.index')->banner('Pedido cancelado com sucesso.');
     }
 }

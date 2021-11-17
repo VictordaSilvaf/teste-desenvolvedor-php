@@ -15,8 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = Product::paginate(20);
-
+        $data = Product::paginate(20)->sortBy("name_product");
         return view('products.index', compact('data'));
     }
 
@@ -38,6 +37,13 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $masks = array(".", "-", "/", " ");
+        $unmasked = str_replace($masks, "", $request->uni_price_product);
+
+        $request->merge([
+            'uni_price_product' => intval($unmasked),
+        ]);
+
         Validator::make($request->all(), [
             'uni_price_product' => 'required',
             'barcode_product' => 'required|max:20',

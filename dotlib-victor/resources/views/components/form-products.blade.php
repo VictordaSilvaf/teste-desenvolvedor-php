@@ -19,15 +19,15 @@
         </div>
         <div class="form-group col-md-2">
             <label for="uni_price_product">Preço do produto *</label>
-            <input name="uni_price_product" type="number" id="uni_price_product"
-                class="@error('uni_price_product') is-invalid @enderror form-control" placeholder="R$ 0.00">
+            <input name="uni_price_product" type="text" id="uni_price_product"
+                class="@error('uni_price_product') is-invalid @enderror form-control cpf" placeholder="R$ 0.00">
             @error('uni_price_product')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="form-group col-md-5">
             <label for="barcode_product">Código de barra *</label>
-            <input name="barcode_product" type="number" class="@error('barcode_product') is-invalid @enderror form-control"
+            <input name="barcode_product" type="number" maxlength="20" class="@error('barcode_product') is-invalid @enderror form-control"
                 id="barcode_product" placeholder="000000000">
             @error('barcode_product')
                 <div class="alert alert-danger">{{ $message }}</div>

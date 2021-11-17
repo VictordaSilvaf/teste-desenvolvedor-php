@@ -27,3 +27,5 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::resource('clientes', CustomerController::class)->middleware('auth');
 Route::resource('produtos', ProductController::class)->middleware('auth');
 Route::resource('pedidos', DemandController::class)->middleware('auth');
+
+Route::get('pedidos/cancelar/{id}', [DemandController::class, 'cancel'])->middleware('auth')->name('pedidos.cancel');

@@ -6,46 +6,37 @@
 
 </style>
 
-
 <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
-
-
-
-    <form class="form-group">
+    <form class="form-group" action="{{ route('clientes.store') }}" method="POST">
         @csrf
+
         <div class="form-group col-md-6">
-            <label for="name_customer">Nome do produto</label>
-            <input type="text" class="@error('name_customer') is-invalid @enderror form-control" id="name_customer"
-                placeholder="Nome do produto">
+            <label for="name_customer">Nome do cliente</label>
+            <input name="name_customer" type="text" class="@error('name_customer') is-invalid @enderror form-control"
+                id="name_customer" placeholder="Nome do cliente">
             @error('name_customer')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+
         <div class="form-group col-md-2">
-            <label for="inputPassword4">Preço do produto *</label>
-            <input type="number" id="inputPassword5" class="@error('registerError') is-invalid @enderror form-control"
-                placeholder="R$ 0.00" aria-describedby="passwordHelpBlock">
-            @error('registerError')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="form-group col-md-5">
-            <label for="inputEmail4">Código de barras *</label>
-            <input type="number" class="@error('registerError') is-invalid @enderror form-control" id="inputEmail4"
-                placeholder="000000000">
-            @error('registerError')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="form-group col-md-3">
-            <label for="inputPassword4">Quantidade de produtos *</label>
-            <input type="number" id="inputPassword5" class="@error('registerError') is-invalid @enderror form-control"
-                placeholder="000" aria-describedby="passwordHelpBlock">
-            @error('registerError')
+            <label for="cpf_customer">CPF *</label>
+            <input name="cpf_customer" type="text" id="cpf_customer"
+                class="@error('cpf_customer') is-invalid @enderror form-control" placeholder="000.000.000-00">
+            @error('cpf_customer')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Entrar</button>
+        <div class="form-group col-md-6">
+            <label for="email_customer">Email</label>
+            <input name="email_customer" type="email" class="@error('email_customer') is-invalid @enderror form-control"
+                id="email_customer" placeholder="email@email.com">
+            @error('email_customer')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <button type="submit" class="btn btn-primary">Cadastrar cliente</button>
     </form>
 </div>

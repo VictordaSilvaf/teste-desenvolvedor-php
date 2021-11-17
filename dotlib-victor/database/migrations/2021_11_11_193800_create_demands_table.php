@@ -15,8 +15,10 @@ class CreateDemandsTable extends Migration
     {
         Schema::create('demands', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('products_id')->constrained();
-            $table->foreignId('demands_id')->constrained();
+            $table->foreignId('product_id')->constrained();
+            $table->foreignId('customer_id')->constrained();
+            $table->string('status');
+            $table->integer('discount');
             $table->timestamps();
         });
     }
@@ -29,10 +31,11 @@ class CreateDemandsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('demands', function (Blueprint $table) {
-            $table->foreignId('user_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->foreignId('product_id')
+                ->constrained();
+
+            $table->foreignId('customer_id')
+                ->constrained();
         });
     }
 }

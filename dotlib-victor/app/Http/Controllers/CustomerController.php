@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
@@ -14,9 +15,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $data = Customer::paginate(20);
-
-        return view('customers.index', compact('data'));
+        $datas = Customer::paginate(20)->sortBy("name_customer");
+        return view('customers.index', compact('datas'));
     }
 
     /**
@@ -37,26 +37,39 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $masks = array(".", "-", "/", " ");
+        $cpf_customer_unmasked = str_replace($masks, "", $request->cpf_customer);
+
+        $request->merge([
+            'cpf_customer' => $cpf_customer_unmasked,
+        ]);
+
+        Validator::make($request->all(), [
             'name_customer' => 'required|max:100',
             'cpf_customer' => 'required|max:11',
-            'email_customer' => 'nullable|max:11',
-        ]);
+            'email_customer' => 'max:160',
+        ], [
+            'max' => 'O numero máximo de numeros é :max.',
+            'required' => 'Este campo é obrigatório.',
+        ])->validate();
+
+        $request->cpf_customer;
 
         Customer::create($request->all());
 
-        return redirect()->route('customers.index')
-            ->with('success', 'Cliente criado com sucesso.');
+        return redirect()->route('clientes.index')
+            ->banner('Cliente criado com sucesso.');
     }
 
     /**
      * Mostra o recurso especificado.
      *
-     * @param  Customer $customer
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Customer $customer)
+    public function show($id)
     {
+        $customer = Customer::findOrFail($id);
         return view('customers.show', compact('customer'));
     }
 
@@ -66,8 +79,9 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Customer $customer)
+    public function edit($id)
     {
+        $customer = Customer::findOrFail($id);
         return view('customers.edit', compact('customer'));
     }
 
@@ -75,46 +89,37 @@ class CustomerController extends Controller
      * Atualize o recurso especificado no armazenamento.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Customer $customer
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'name_customer' => 'required',
-            'cpf_customer' => 'required',
-        ]);
+        $customer = Customer::findOrFail($id);
+
+        Validator::make($request->all(), [
+            'name_customer' => 'required|max:100',
+            'cpf_customer' => 'required|max:11',
+            'email_customer' => 'max:160',
+        ], [
+            'max' => 'O numero máximo de caracteres é :max.',
+            'required' => 'Este campo é obrigatório.',
+        ])->validate();
 
         $customer->update($request->all());
 
-        return redirect()->route('customers.index')
-            ->with('success', 'Cliente atualizado com sucesso.');
+        return redirect()->route('clientes.index')
+            ->banner('Cliente atualizado com sucesso.');
     }
 
     /**
      * Remova o recurso especificado do armazenamento.
      *
-     * @param  Customer $customer
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Customer $customer)
+    public function destroy($id)
     {
-        $customer->delete();
-
-        return redirect()->route('customers.index')
-            ->with('success', 'Cliente deletado com sucesso.');
-    }
-
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'title.required' => 'A title is required',
-            'body.required' => 'A message is required',
-        ];
+        Customer::findOrFail($id)->delete();
+        return redirect()->route('clientes.index')->banner('Produto deletado com sucesso.');
     }
 }
