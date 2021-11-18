@@ -13,10 +13,10 @@
 - Mude para a branch Victor-Silva.
 - Após o checkout entre na pasta dotlib-victor aonde esta localizado o projeto.
 - Rode o comando composer install, caso necessário instale as extenções pedidas.
--- sudo apt-get install php8.0-curl
--- sudo apt-get install php-mbstring
--- sudo apt-get install php8.0-mysql
--- sudo apt-get install php-xml
+- - sudo apt-get install php8.0-curl
+- - sudo apt-get install php-mbstring
+- - sudo apt-get install php8.0-mysql
+- - sudo apt-get install php-xml
 - Rode o comando sail up -d ou ./vendor/bin/sail up -d para inciciar os container do docker em modo desenvolvimento.
 - Crie um banco de dados chamado "dotlib_victor".
 - Se o docker abrir os containers corretamente, rode o comando "php artisan migrate" para rodar todas as migrates.
