@@ -5,7 +5,6 @@
     }
 
 </style>
-{{dd($products)}}
 
 <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
     <form class="form-group" action="{{ route('pedidos.store') }}" method="POST">

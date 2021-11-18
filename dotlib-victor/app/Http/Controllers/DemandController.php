@@ -56,31 +56,16 @@ class DemandController extends Controller
             'customer_id' => 'required',
             'product_id' => 'required',
             'status' => 'required',
-            'discount' => 'max:3'
+            'discount' => 'required|max:3'
         ], [
             'required' => 'Este campo é obrigatório.',
             'max' => 'O numero máximo de caracteres é :max.',
         ])->validate();
 
-        $demand = new Demand;
+        Demand::create($request->all());
 
-        if($request->discount == null) {
-            $demand->discount = 0;
-        }
-
-        $customers = Customer::all();
-        $products = Product::all();
-
-        $demand->customer_id = $customers->findOfFail($request->customer_id);
-        $demand->product_id = $products->findOfFail($request->product_id);
-
-        try {
-            $demand->save();
-            return redirect()->route('pedidos.index')->banner('Pedido criado com sucesso.');
-        } catch (\Throwable $th) {
-            dd($th);
-            return redirect()->route('pedidos.index')->dangerBanner('Não foi possivel adicionar o desconto.');
-        }
+        return redirect()->route('pedidos.index')
+            ->banner('Cliente criado com sucesso.');
     }
 
     /**

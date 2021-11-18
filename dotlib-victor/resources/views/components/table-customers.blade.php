@@ -7,7 +7,7 @@
                 <td class="col-1">CPF</td>
                 <td class="col-1">Email</td>
                 <td class="col-1">
-                    <a href={{ route('clientes.create') }} class="btn btn-primary mb-2"
+                    <a href="{{ route('clientes.create') }}" class="btn btn-primary mb-2"
                         id='adicionarCliente'>Adicionar
                         cliente</a>
                 </td>

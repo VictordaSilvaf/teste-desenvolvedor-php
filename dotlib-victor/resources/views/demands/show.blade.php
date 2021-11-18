@@ -15,12 +15,7 @@
                     <p><span>CPF do cliente: </span>{{ $demand->customer()->get()->first()->cpf_customer }}</p>
                     <p><span>Email do cliente: </span>{{ $demand->customer()->get()->first()->email_customer }}</p>
 
-                    <form
-                        action="{{ route(
-                            'clientes.destroy',
-                            $demand->customer()->get()->first()->id,
-                        ) }}"
-                        method="POST" class="flex-column">
+                    <div class="flex-column">
                         <a href="{{ route('clientes.index') }}" class="btn btn-primary">Voltar</a>
 
                         <a href="{{ route(
@@ -28,11 +23,7 @@
                             $demand->customer()->get()->first()->id,
                         ) }}"
                             class="btn btn-success" id='editProduct'>Editar</a>
-
-                        @csrf
-                        @method("DELETE")
-                        <button type="submit" class="btn btn-danger">Deletar</button>
-                    </form>
+                    </div>
                 </div>
 
                 <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
@@ -43,35 +34,33 @@
                     <p><span>Código de barra: </span>{{ $demand->product()->get()->first()->barcode_product }}</p>
                     <p><span>Quantidade: </span>{{ $demand->product()->get()->first()->qnt_product }}</p>
 
-                    <form
-                        action="{{ route(
-                            'produtos.destroy',
-                            $demand->product()->get()->first()->id,
-                        ) }}"
-                        method="POST" class="flex-column">
-                        <a href="{{ route('produtos.index') }}" class="btn btn-primary">Voltar</a>
+                    <div class="flex-column">
+                        <a href="{{ route('clientes.index') }}" class="btn btn-primary">Voltar</a>
 
                         <a href="{{ route(
-                            'produtos.edit',
-                            $demand->product()->get()->first()->id,
+                            'clientes.edit',
+                            $demand->customer()->get()->first()->id,
                         ) }}"
                             class="btn btn-success" id='editProduct'>Editar</a>
-
-                        @csrf
-                        @method("DELETE")
-                        <button type="submit" class="btn btn-danger">Deletar</button>
-                    </form>
+                    </div>
 
                 </div>
 
                 <div class="p-6 sm:px-20 bg-white border-b border-gray-200 d-flex flex-row justify-content-between">
                     <p><span>Desconto: </span>{{ $demand->discount }}%</p>
+                    <p><span>Ststus: </span>{{ $demand->status }}</p>
 
-                    <p><span>Total:
-                        </span>{{ $demand->product()->get()->first()->qnt_product *
-                            (($demand->product()->get()->first()->uni_price_product *
-                                $demand->discount) /
-                                100) }}
+                    <p><span>Total:</span>
+                        R$
+                        {{ number_format(
+    $demand->product()->get()->first()->qnt_product *
+        $demand->product()->get()->first()->uni_price_product -
+        ($demand->product()->get()->first()->qnt_product *
+            $demand->product()->get()->first()->uni_price_product *
+            $demand->discount) /
+            100,
+    2,
+) }}
                     </p>
 
                 </div>
