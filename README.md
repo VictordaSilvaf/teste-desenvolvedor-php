@@ -6,6 +6,7 @@
 - Composer
 - php 8 ou superior
 - nodejs versão lts +
+- docker
 
 ## Como rodar o projeto
 
